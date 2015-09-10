@@ -27,11 +27,17 @@ function initGameboard(height, width){
 function drawWorm() {
 	var length = 5;
 	var color = 'blue';
+	var whitecolor = 'white';
 	var position = [];
 	var startPosition = 62;
 
+	setInterval(function(){
+
+		startPosition++;
 	for (var i = 0; i<length; i++){
 		position.push(startPosition+i);
 		document.getElementById(startPosition + i).style.backgroundColor = color;
-	}
+		document.getElementById(startPosition - 1).style.backgroundColor = whitecolor;
+	} 
+}, 100);
 }
