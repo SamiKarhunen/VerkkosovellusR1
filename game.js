@@ -9,17 +9,27 @@ function initGameboard(height, width){
 	console.log("initGameboard");
 
 	var gameboard = '<table id="gameboard">';
+ 
 
-	for (var i=0; i<height; i++) {
-		gameboard+= '<tr>';
-		for (var j = 0; j < width; j++) {
-			var id = (j+(i*height));
-			var grid = '<td id="' + id + '" title= "' + id + '"></td>';
-			gameboard += grid;
-		}
-		gameboard += '</tr>'
-		}
-		gameboard += '</table>';
+  var tableElement = document.createElement("table");
+  tableElement.setAttribute("id", "gameboard");
+ 
+  for (var iRow = 0; iRow < height; ++iRow) {
+    var rowElement = document.createElement("tr");
+    for (var iCell = 0; iCell < width; ++iCell)
+    {
+      var cellElement = document.createElement("td");
+      // Videolla iRow * height + iCell
+      cellElement.setAttribute("id", iRow * width + iCell);
+      cellElement.setAttribute("title", iRow * width + iCell);
+      rowElement.appendChild(cellElement);
+      
+      if (!iRow) {
+      }
+    }
+    tableElement.appendChild(rowElement);
+  }
+  document.body.appendChild(tableElement);
 
 		document.getElementById('gameboard').innerHTML = gameboard;
 	}
