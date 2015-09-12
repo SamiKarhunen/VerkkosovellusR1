@@ -1,7 +1,11 @@
+var gameboardWidth = 20;
+var gameboardHeight = 20;
+var direction = 2;
+
 function startGame(){
 	console.log("startGame");
 
-	initGameboard(20, 20);
+	initGameboard(gameboardWidth, gameboardHeight);
 	drawWorm();
 }
 
@@ -24,8 +28,7 @@ function initGameboard(height, width){
       cellElement.setAttribute("title", iRow * width + iCell);
       rowElement.appendChild(cellElement);
       
-      if (!iRow) {
-      }
+     
     }
     tableElement.appendChild(rowElement);
   }
@@ -42,12 +45,24 @@ function drawWorm() {
 	var startPosition = 62;
 
 	setInterval(function(){
+		
 
-		startPosition++;
+		if (direction == 1){
+		startPosition += gameboardWidth;
+	for (var i = 0; i<length; i++){
+		position.push(startPosition);
+		document.getElementById(startPosition + gameboardWidth * i).style.backgroundColor = color;
+		document.getElementById(startPosition - gameboardWidth).style.backgroundColor = whitecolor;
+		}
+	}
+
+		if (direction == 2){
+			startPosition++;
 	for (var i = 0; i<length; i++){
 		position.push(startPosition+i);
 		document.getElementById(startPosition + i).style.backgroundColor = color;
 		document.getElementById(startPosition - 1).style.backgroundColor = whitecolor;
+		}
 	} 
 }, 100);
 }
