@@ -37,6 +37,7 @@ function initGameboard(height, width){
 		document.getElementById('gameboard').innerHTML = gameboard;
 	}
 
+	
 function drawWorm() {
 	var length = 5;
 	var color = 'blue';
@@ -89,3 +90,28 @@ function drawWorm() {
 
 }, 100);
 }
+
+//Key listener
+window.addEventListener("keydown", function(event) {
+		if(event.defaultPrevented) {
+			return;
+		}
+	//Do something on key event
+	switch (event.key) {
+		case "ArrowRight":
+		  direction = 2;
+		  break;
+		case "ArrowLeft":
+		  direction = 3;
+		  break;
+		case "ArrowUp":
+		  direction = 4;
+		  break;
+		case "ArrowDown":
+		  direction = 1;
+		  break;
+		default:
+		  return; // Quit when this doesn't handle the key event.
+	}
+		event.preventDefault();
+},true);
