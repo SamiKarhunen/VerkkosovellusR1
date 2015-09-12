@@ -1,6 +1,6 @@
 var gameboardWidth = 20;
 var gameboardHeight = 20;
-var direction = 2;
+var direction = 4;
 
 function startGame(){
 	console.log("startGame");
@@ -42,11 +42,12 @@ function drawWorm() {
 	var color = 'blue';
 	var whitecolor = 'white';
 	var position = [];
-	var startPosition = 62;
+	var startPosition = 380;
 
 	setInterval(function(){
 		
 
+		// Mato liikkuu alas
 		if (direction == 1){
 		startPosition += gameboardWidth;
 	for (var i = 0; i<length; i++){
@@ -56,6 +57,7 @@ function drawWorm() {
 		}
 	}
 
+		// Mato liikkuu oikealle
 		if (direction == 2){
 			startPosition++;
 	for (var i = 0; i<length; i++){
@@ -63,6 +65,27 @@ function drawWorm() {
 		document.getElementById(startPosition + i).style.backgroundColor = color;
 		document.getElementById(startPosition - 1).style.backgroundColor = whitecolor;
 		}
+	}
+
+		// Mato liikkuu vasemmalle
+		if(direction == 3){
+			startPosition--;
+	for (var i = 0; i<length; i++){
+		position.push(startPosition-i);
+		document.getElementById(startPosition - i).style.backgroundColor = color;
+		document.getElementById(startPosition + 1).style.backgroundColor = whitecolor;
+		}	
 	} 
+
+		// Mato liikkuu ylös
+		if (direction == 4){
+			startPosition -= gameboardWidth;
+	for (var i = 0; i<length; i++){
+		position.push(startPosition);
+		document.getElementById(startPosition - gameboardWidth * i).style.backgroundColor = color;
+		document.getElementById(startPosition + gameboardWidth).style.backgroundColor = whitecolor;
+		}
+	}
+
 }, 100);
 }
