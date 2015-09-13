@@ -1,6 +1,8 @@
 var gameboardWidth = 20;
 var gameboardHeight = 20;
 var direction = 4;
+var clearTail;
+var startPosition = 380;
 
 function startGame(){
 	console.log("startGame");
@@ -38,14 +40,65 @@ function initGameboard(height, width){
 	}
 
 	
+function clearWorm() {
+	var length = 6;
+	var clearPosition = startPosition;
+	var whitecolor = 'white';
+	var position = [];
+
+		if (clearTail == 1){
+			
+			for (var i = 0; i<length; i++)
+			{
+				position.push(clearPosition);
+				document.getElementById(clearPosition -gameboardWidth).style.backgroundColor = whitecolor;
+				clearPosition += gameboardWidth;
+			}
+		}
+	
+		if (clearTail == 2){
+			
+			for (var i = 0; i<length; i++)
+			{
+				position.push(clearPosition);
+				document.getElementById(clearPosition -1).style.backgroundColor = whitecolor;
+				clearPosition++;
+			}
+		}
+
+		if (clearTail == 3){
+			
+			for (var i = 0; i<length; i++)
+			{
+				position.push(clearPosition);
+				document.getElementById(clearPosition + 1).style.backgroundColor = whitecolor;
+				clearPosition--;
+			}
+		}
+
+		if (clearTail == 4){
+			
+			for (var i = 0; i<length; i++)
+			{
+				position.push(clearPosition);
+				document.getElementById(clearPosition - gameboardWidth).style.backgroundColor = whitecolor;
+				clearPosition-=gameboardWidth;
+			}
+		}
+
+
+}
+
 function drawWorm() {
 	var length = 5;
 	var color = 'blue';
 	var whitecolor = 'white';
 	var position = [];
-	var startPosition = 380;
+
+	
 
 	setInterval(function(){
+
 		
 
 		// Mato liikkuu alas
@@ -55,9 +108,11 @@ function drawWorm() {
 		position.push(startPosition);
 		document.getElementById(startPosition + gameboardWidth * i).style.backgroundColor = color;
 		document.getElementById(startPosition - gameboardWidth).style.backgroundColor = whitecolor;
+		clearTail = 1;
 		}
 	}
 
+	
 		// Mato liikkuu oikealle
 		if (direction == 2){
 			startPosition++;
@@ -65,6 +120,7 @@ function drawWorm() {
 		position.push(startPosition+i);
 		document.getElementById(startPosition + i).style.backgroundColor = color;
 		document.getElementById(startPosition - 1).style.backgroundColor = whitecolor;
+		clearTail = 2;
 		}
 	}
 
@@ -75,6 +131,7 @@ function drawWorm() {
 		position.push(startPosition-i);
 		document.getElementById(startPosition - i).style.backgroundColor = color;
 		document.getElementById(startPosition + 1).style.backgroundColor = whitecolor;
+		clearTail = 3;
 		}	
 	} 
 
@@ -85,6 +142,7 @@ function drawWorm() {
 		position.push(startPosition);
 		document.getElementById(startPosition - gameboardWidth * i).style.backgroundColor = color;
 		document.getElementById(startPosition + gameboardWidth).style.backgroundColor = whitecolor;
+		clearTail = 4;
 		}
 	}
 
@@ -100,15 +158,19 @@ window.addEventListener("keydown", function(event) {
 	switch (event.key) {
 		case "ArrowRight":
 		  direction = 2;
+		  clearWorm();
 		  break;
 		case "ArrowLeft":
 		  direction = 3;
+		  clearWorm();
 		  break;
 		case "ArrowUp":
 		  direction = 4;
+		  clearWorm();
 		  break;
 		case "ArrowDown":
 		  direction = 1;
+		  clearWorm();
 		  break;
 		default:
 		  return; // Quit when this doesn't handle the key event.
