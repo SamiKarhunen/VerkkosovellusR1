@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Worm game</title>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+	<link rel="stylesheet" href="style.css">
+</head>
+ <body onload="startGame()">
+    <div id="login">
+		<fieldset>
+			<legend><strong>Login</strong></legend>
+			Username: <input type="text" name="username" id="username">
+			Password: <input type="text" name="password" id="password">
+			<button type='submit' onclick="Register()" value="Register">Register</button>
+			<script type="text/javascript">
+			// Palauttaa username ja password id:llä merkittyjen kenttien arvot.
+			function Register() {
+				var username = $("#username").val();
+				var password = $("#password").val();
+				
+				//Salasana ja käyttäjätunnus lähtee GET-requestilla
+				$.get("/register", {username: username, password: password}, function(res) {
+					alert(res);
+				});
+			};
+			</script>
+		</fieldset>
+	</div>
+        <div id="gameboard_div">
+
+        </div>
+		<div id="chat">
+		<script src = "/socket.io/socket.io.js"></script>
+		<script>
+			var socket = io();
+			
+			//vastataan palvelimen antamaan infoon
+			socket.on('info', function(data){
+				console.log(data);
+				socket.emit('message', {socket: 'connection established'});
+				});
+		</script>
+		<fieldset>
+			<legend><strong>Chat</strong></legend>
+			Type your message: <input type="text" name="message input" id="message input" size="30" maxlength="120"> 
+		</fieldset>
+	</div>
+
+    </body>
+		<script src="https://code.jquery.com/jquery-2.1.4.js"></script>
+        <script src="game.js"></script>
+</html>
