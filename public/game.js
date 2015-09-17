@@ -1,179 +1,234 @@
-var gameboardWidth = 20;
-var gameboardHeight = 20;
-var direction = 4;
-var clearTail;
-var startPosition = 380;
+var snake = [];
+var direction = 2; //oikealle
+var START_LENGTH = 4;
+var fps = 30;
+var appleEaten = false;
+var snakeAlive = false;
+var score = 0;
 
-function startGame(){
-	console.log("startGame");
+var gameboardWidth = 35;
+var gameboardHeight = 35;
 
-	initGameboard(gameboardWidth, gameboardHeight);
-	drawWorm();
+var applePosRow;
+var applePosData;
+
+
+//PAINETUN NÄPPÄIMEN TARKISTUS JA DIRECTION-MUUTTUJAN MUOKKAUS//
+document.onkeydown = checkKey;
+
+function checkKey(e) {
+
+	e = e || window.event;
+
+	if (e.keyCode == '38') {
+		// up arrow
+		if(direction != 3){
+			direction = 1;
+		}
+	}
+	else if (e.keyCode == '40') {
+		// down arrow
+		if(direction != 1){
+			direction = 3
+		}
+	}
+	else if (e.keyCode == '37') {
+		// left arrow
+		if(direction != 2){
+			direction = 4
+		}
+	}
+	else if (e.keyCode == '39') {
+		// right arrow
+		if(direction != 4){
+			direction = 2
+		}
+	}
+	if (e.keyCode == '82') {
+		if(!snakeAlive){
+			snakeAlive = true;
+			initSnake();
+			drawApple();
+		}
+
+	}
 }
-
-function initGameboard(height, width){
-	console.log("initGameboard");
-
-	var gameboard = '<table id="gameboard">';
- 
-
-  var tableElement = document.createElement("table");
-  tableElement.setAttribute("id", "gameboard");
- 
-  for (var iRow = 0; iRow < height; ++iRow) {
-    var rowElement = document.createElement("tr");
-    for (var iCell = 0; iCell < width; ++iCell)
-    {
-      var cellElement = document.createElement("td");
-      // Videolla iRow * height + iCell
-      cellElement.setAttribute("id", iRow * width + iCell);
-      cellElement.setAttribute("title", iRow * width + iCell);
-      rowElement.appendChild(cellElement);
-      
-     
-    }
-    tableElement.appendChild(rowElement);
-  }
-  document.body.appendChild(tableElement);
-
-		document.getElementById('gameboard').innerHTML = gameboard;
+//FUNKTIO OMENAN SIJOITTAMISEEN KENTÄLLE//
+function drawApple(){
+	var rowNotOk = true;
+	while(rowNotOk){
+		applePosRow = Math.floor((Math.random() * gameboardHeight));
+		applePosData = Math.floor((Math.random() * gameboardHeight));
+		var length = snake.length;
+		for(i=0; i < length;i++){
+			var row = snake[i][0];
+			var data = snake[i][1];
+			if(applePosRow == row && applePosData == data){
+				console.log("Apple inside snake");
+				rowNotOk = true;
+				break;
+			}
+			if(applePosRow == 0 || applePosRow == gameboardHeight -1 || applePosData == 0 || applePosData == gameboardWidth -1){
+				console.log("Apple inside border");
+				rowNotOk = true;
+				break;
+			} else{
+				rowNotOk = false;
+			}
+		}
 	}
 
-	
-function clearWorm() {
-	var length = 6;
-	var clearPosition = startPosition;
-	var whitecolor = 'white';
-	var position = [];
 
-		if (clearTail == 1){
-			
-			for (var i = 0; i<length; i++)
-			{
-				position.push(clearPosition);
-				document.getElementById(clearPosition -gameboardWidth).style.backgroundColor = whitecolor;
-				clearPosition += gameboardWidth;
-			}
-		}
-	
-		if (clearTail == 2){
-			
-			for (var i = 0; i<length; i++)
-			{
-				position.push(clearPosition);
-				document.getElementById(clearPosition -1).style.backgroundColor = whitecolor;
-				clearPosition++;
-			}
-		}
-
-		if (clearTail == 3){
-			
-			for (var i = 0; i<length; i++)
-			{
-				position.push(clearPosition);
-				document.getElementById(clearPosition + 1).style.backgroundColor = whitecolor;
-				clearPosition--;
-			}
-		}
-
-		if (clearTail == 4){
-			
-			for (var i = 0; i<length; i++)
-			{
-				position.push(clearPosition);
-				document.getElementById(clearPosition - gameboardWidth).style.backgroundColor = whitecolor;
-				clearPosition-=gameboardWidth;
-			}
-		}
+	$("#r"+applePosRow+"d"+applePosData).css("background", "red");
 
 
 }
 
-function drawWorm() {
-	var length = 5;
-	var color = 'blue';
-	var whitecolor = 'white';
-	var position = [];
-
-	
-
-	setInterval(function(){
-
-		
-
-		// Mato liikkuu alas
-		if (direction == 1){
-		startPosition += gameboardWidth;
-	for (var i = 0; i<length; i++){
-		position.push(startPosition);
-		document.getElementById(startPosition + gameboardWidth * i).style.backgroundColor = color;
-		document.getElementById(startPosition - gameboardWidth).style.backgroundColor = whitecolor;
-		clearTail = 1;
-		}
+function initSnake(){
+	score = 0;
+	for ( i = 0; i < START_LENGTH; i++){
+		var row = Math.floor((gameboardWidth/2)); //Asetetaan riviksi keskimmäinen rivi
+		var data = Math.floor((gameboardHeight/2) - i); //asetetaan dataksi keskimmäinen td - kierroksen numero
+		var locCoord = [row,data] ;//Tehdään taulukko joka sisältää kaksi arvoa, rivin ja sarakkeen
+		snake.push(locCoord); //lisätään äsken luotu taulu käärmeen kohdaksi
 	}
+	drawSnake();
+}
+//FUNKTIO PELILAUDAN ALUSTUSTA VARTEN//
+function initGameBoard(height,width){
+	var gameboard = '<p id = score style="text-align:center">Score: </p>';
+	gameboard += '<table id="gameboard">';
 
-	
-		// Mato liikkuu oikealle
-		if (direction == 2){
-			startPosition++;
-	for (var i = 0; i<length; i++){
-		position.push(startPosition+i);
-		document.getElementById(startPosition + i).style.backgroundColor = color;
-		document.getElementById(startPosition - 1).style.backgroundColor = whitecolor;
-		clearTail = 2;
+	for(i = 0; i<height; i++){
+		gameboard += '<tr>';
+		for (j = 0; j < width; j++){
+			var id = "r"+i+"d"+j;
+			var grid = '<td id="'+id+'">';
+			gameboard += grid;
 		}
+		gameboard += '</tr>';
 	}
-
-		// Mato liikkuu vasemmalle
-		if(direction == 3){
-			startPosition--;
-	for (var i = 0; i<length; i++){
-		position.push(startPosition-i);
-		document.getElementById(startPosition - i).style.backgroundColor = color;
-		document.getElementById(startPosition + 1).style.backgroundColor = whitecolor;
-		clearTail = 3;
-		}	
-	} 
-
-		// Mato liikkuu ylös
-		if (direction == 4){
-			startPosition -= gameboardWidth;
-	for (var i = 0; i<length; i++){
-		position.push(startPosition);
-		document.getElementById(startPosition - gameboardWidth * i).style.backgroundColor = color;
-		document.getElementById(startPosition + gameboardWidth).style.backgroundColor = whitecolor;
-		clearTail = 4;
-		}
-	}
-
-}, 100);
+	gameboard += '</table>';
+	gameboard += '<p style="text-align: center"> Ohjaa matoa nuolinäppäimillä. Kuoleman jälkeen paina R syntyäksesi uudelleen </P>'
+	$("#gameboard_div").html(gameboard);
+	initSnake();
+	drawApple();
 }
 
-//Key listener
-window.addEventListener("keydown", function(event) {
-		if(event.defaultPrevented) {
-			return;
-		}
-	//Do something on key event
-	switch (event.key) {
-		case "ArrowRight":
-		  direction = 2;
-		  clearWorm();
-		  break;
-		case "ArrowLeft":
-		  direction = 3;
-		  clearWorm();
-		  break;
-		case "ArrowUp":
-		  direction = 4;
-		  clearWorm();
-		  break;
-		case "ArrowDown":
-		  direction = 1;
-		  clearWorm();
-		  break;
-		default:
-		  return; // Quit when this doesn't handle the key event.
+initGameBoard(gameboardHeight,gameboardWidth);
+
+
+//FUNKTIO MADON PIIRTÄMISTÄ VARTEN//
+function drawSnake(){
+	if(snakeAlive){
+		setTimeout(function(){
+			requestAnimationFrame(drawSnake);
+			$("#score").html("Score: " + score);
+			//tehdään loop joka puhdistaa pöydän aina piirtämisen välissä, paitsi omenan kohdalta. Piirtää myös mustat reunat
+			for(i = 0; i< gameboardHeight;i++){
+				for(j=0;j<gameboardWidth;j++){
+					var rowToClear = i;
+					var dataToClear = j;
+					if(rowToClear == applePosRow && dataToClear == applePosData){
+						$("#r"+rowToClear+"d"+dataToClear).css("background", "red");
+					} else if(rowToClear == 0 || rowToClear == gameboardHeight -1 || dataToClear == 0 || dataToClear == gameboardWidth -1){
+						$("#r"+rowToClear+"d"+dataToClear).css("background", "black");
+					}
+					else{
+						$("#r"+rowToClear+"d"+dataToClear).css("background", "lightblue");
+					}
+				}
+			}
+
+			var length = snake.length;
+			for(i=0; i < length;i++){
+				var row = snake[i][0];
+				var data = snake[i][1];
+				$("#r"+row+"d"+data).css("background", "green");
+			}
+
+			if(direction == 1){//Mennään ylös eli vähennetään rowin
+				var headrow = snake[0][0] - 1;
+				var headdata = snake[0][1];
+				var newHead = [headrow,headdata];
+				snake.splice(0,0,newHead);
+				if(!appleEaten){
+					snake.pop();
+				}
+				appleEaten = false;
+			}
+			else if(direction == 2){//Mennään oikealle eli lisätään datan arvoa
+				var headrow = snake[0][0];
+				var headdata = snake[0][1] + 1;
+				var newHead = [headrow,headdata];
+				snake.splice(0,0,newHead);
+				if(!appleEaten){
+					snake.pop();
+				}
+				appleEaten = false;
+			}
+			else if(direction == 3){//Mennään alas eli lisätään rowin arvoa
+				var headrow = snake[0][0] + 1;
+				var headdata = snake[0][1];
+				var newHead = [headrow,headdata];
+				snake.splice(0,0,newHead);
+				if(!appleEaten){
+					snake.pop();
+				}
+				appleEaten = false;
+			}
+			else if(direction == 4){//Mennään vasemmalle eli vähennetään datan arvoa
+				var headrow = snake[0][0];
+				var headdata = snake[0][1] - 1;
+				var newHead = [headrow,headdata];
+				snake.splice(0,0,newHead);
+				if(!appleEaten){
+					snake.pop();
+				}
+				appleEaten = false;
+			}
+
+			//törmäyksen tarkistaminen omaan häntään
+			for(i=1; i < length;i++){
+				var headrow = snake[0][0];
+				var headdata = snake[0][1];
+				var row = snake[i][0];
+				var data = snake[i][1];
+				if(row == headrow && data == headdata){
+					snakeAlive = false;
+					gameOverScreen();
+				}
+			}
+			//Törmäyksen tarkistaminen reunaan
+			if(snakeAlive){
+				if(snake[0][0] == 0 || snake[0][0] == gameboardHeight - 1|| snake[0][1] == 0 || snake[0][1] == gameboardWidth - 1){
+					snakeAlive = false;
+					gameOverScreen();
+				}
+			}
+			//Omenan syönnin tarkistus
+			if(snakeAlive){
+				if(snake[0][0] == applePosRow && snake[0][1] == applePosData){
+					appleEaten = true;
+					score += 1;
+					drawApple();
+				}
+			}
+
+
+		},1500/fps);
 	}
-		event.preventDefault();
-},true);
+}
+
+function gameOverScreen(){
+	snake = [];
+	for(i = 0; i< gameboardHeight;i++){
+		for(j=0;j<gameboardWidth;j++){
+			var row = i;
+			var data = j;
+
+			$("#r"+row+"d"+data).css("background", "black");
+
+		}
+	}
+}
