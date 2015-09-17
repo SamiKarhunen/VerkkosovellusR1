@@ -23,24 +23,28 @@ function checkKey(e) {
 	if (e.keyCode == '38') {
 		// up arrow
 		if(direction != 3){
+			e.preventDefault();
 			direction = 1;
 		}
 	}
 	else if (e.keyCode == '40') {
 		// down arrow
 		if(direction != 1){
+			e.preventDefault();
 			direction = 3
 		}
 	}
 	else if (e.keyCode == '37') {
 		// left arrow
 		if(direction != 2){
+			e.preventDefault();
 			direction = 4
 		}
 	}
 	else if (e.keyCode == '39') {
 		// right arrow
 		if(direction != 4){
+			e.preventDefault();
 			direction = 2
 		}
 	}
