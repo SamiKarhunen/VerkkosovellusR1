@@ -6,6 +6,7 @@ var register = require('./register.js');
 
 app.use(express.static('public'));
 
+//Comment
 app.get('/register', function(req, res) {
 	var username = req.query.username;
 	var password = req.query.password;
