@@ -31,11 +31,21 @@
 
         </div>
 		<div id="chat">
-			<fieldset>
-				<legend><strong>Chat</strong></legend>
-				Type your message: <input type="text" name="message input" id="message input" size="30" maxlength="120"> 
-			</fieldset>
-		</div>
+		<script src = "/socket.io/socket.io.js"></script>
+		<script>
+			var socket = io();
+			
+			//vastataan palvelimen antamaan infoon
+			socket.on('info', function(data){
+				console.log(data);
+				socket.emit('message', {socket: 'connection established'});
+				});
+		</script>
+		<fieldset>
+			<legend><strong>Chat</strong></legend>
+			Type your message: <input type="text" name="message input" id="message input" size="30" maxlength="120"> 
+		</fieldset>
+	</div>
 
     </body>
 		<script src="https://code.jquery.com/jquery-2.1.4.js"></script>
