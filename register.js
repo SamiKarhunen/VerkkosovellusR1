@@ -3,7 +3,7 @@ var mysql = require('mysql');
 var connection = mysql.createConnection({
 	host	: 'localhost',
 	user	: 'root',
-	password: 'test1234',
+	password: '12345',
 	database: 'vsklogin'
 });
 
