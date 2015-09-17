@@ -13,6 +13,7 @@ function startGame(){
 	drawWorm();
 }
 
+//We initialize our gameboard
 function initGameboard(height, width){
 	console.log("initGameboard");
 
@@ -22,6 +23,7 @@ function initGameboard(height, width){
   var tableElement = document.createElement("table");
   tableElement.setAttribute("id", "gameboard");
  
+ //Loop to create our board
   for (var iRow = 0; iRow < height; ++iRow) {
     var rowElement = document.createElement("tr");
     for (var iCell = 0; iCell < width; ++iCell)
@@ -38,6 +40,7 @@ function initGameboard(height, width){
   }
   document.body.appendChild(tableElement);
 
+		//Push board to #gameboard div element
 		document.getElementById('gameboard').innerHTML = gameboard;
 	}
 
@@ -91,6 +94,7 @@ function clearWorm() {
 
 }
 
+//Draw worm on board
 function drawWorm() {
 	var length = 5;
 	var color = 'blue';
@@ -151,7 +155,7 @@ function drawWorm() {
 }, 100);
 }
 
-//Key listener
+//Key listener and worm controller
 window.addEventListener("keydown", function(event) {
 		if(event.defaultPrevented) {
 			return;
