@@ -1,9 +1,11 @@
+//Variables
 var gameboardWidth = 20;
 var gameboardHeight = 20;
 var direction = 4;
 var clearTail;
 var startPosition = 380;
 
+//Methods
 function startGame(){
 	console.log("startGame");
 
