@@ -27,10 +27,7 @@
 			</script>
 		</fieldset>
 	</div>
-        <div id="gameboard_div">
-
-        </div>
-		<div id="chat">
+	<div id="chat" class="content">
 		<script src = "/socket.io/socket.io.js"></script>
 		<script>
 			var socket = io();
@@ -41,11 +38,23 @@
 				socket.emit('message', {socket: 'connection established'});
 				});
 		</script>
-		<fieldset>
+		<fieldset id="chat">
 			<legend><strong>Chat</strong></legend>
 			Type your message: <input type="text" name="message input" id="message input" size="30" maxlength="120"> 
 		</fieldset>
 	</div>
+        <div id="gameboard_div" class="content">
+
+        </div>
+        <div id="online_users" class="floatright">
+        	<fieldset id="scoreplayers"><legend><strong>Online Users</strong></legend></fieldset>
+        </div>
+        <div id="high_score" class="floatright">
+        	<fieldset id="scoreplayers"><legend><strong>High Score</strong></legend></fieldset>
+        </div>
+
+
+		
 
     </body>
 		<script src="https://code.jquery.com/jquery-2.1.4.js"></script>
