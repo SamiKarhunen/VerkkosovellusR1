@@ -5,7 +5,7 @@ Jos on ongelmia mysql:n tai expressin package.jsonin kanssa
 -> npm install mysql
 
 Jos tietokantaan yhdistäminen ei onnistu
--> avaa register.js
--> muuta var connection -kohdasta password omaan mysql root salasanaan
+-> avaa dbconnection.js
+-> muuta tiedot oman mysql tietojen mukaisiksi
 
 lisäilkää juttuja jos löytyy ongelmia!

@@ -1,11 +1,6 @@
 var mysql = require('mysql');
 
-var connection = mysql.createConnection({
-	host	: 'localhost',
-	user	: 'root',
-	password: 'test1234',
-	database: 'vsklogin'
-});
+var connection = mysql.createConnection(require('./dbconnection.js'));
 
 exports.RegisterPlayer = function(username, password, callback) {
 	CheckIfExists(username, function(err) {

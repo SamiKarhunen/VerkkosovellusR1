@@ -64,6 +64,7 @@
 			socket.on('info', function(data){
 				console.log(data);
 				socket.emit('message', {socket: 'connection established'});
+				socket.emit('listUpdate');
 				});
 		</script>
 		<fieldset id="chat">
@@ -76,10 +77,13 @@
 			<ul id = "onlineNames"></ul>
 			<script>
 				//Listener userUpdate tapahtumalle joka tyhjentää #onlinenamesin
-				//ja siirtää sitten käyttäjälistan. En saanut vielä näkymään oikeana listana.
+				//ja siirtää sitten käyttäjälistan.
 				socket.on('userUpdate', function(data){
 					$("#onlineNames").empty();
-					$("#onlineNames").append($('<li>').text(data));
+					for(i=0;i<data.length;i++)
+					{
+						$("#onlineNames").append($('<li>').text(data[i]));
+					}
 				});
 			</script>	
 		</fieldset>

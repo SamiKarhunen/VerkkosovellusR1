@@ -4,16 +4,11 @@ var http = require('http').Server(app);
 var io = require('socket.io')(http);
 var mysql = require('mysql');
 
-var connection = mysql.createConnection({
-	host	: 'localhost',
-	user	: 'root',
-	password: 'test1234',
-	database: 'vsklogin'
-});
+var connection = mysql.createConnection(require('./functions/dbconnection.js'));
 
-var register = require('./register.js');
-var login = require('./login.js');
-var logout = require('./logout.js');
+var register = require('./functions/register.js');
+var login = require('./functions/login.js');
+var logout = require('./functions/logout.js');
 
 app.use(express.static('public'));
 
@@ -85,17 +80,7 @@ io.on('connection', function(socket){
 			console.log("Online users: " + userlist);
 			io.sockets.emit('userUpdate', userlist);
 		});
-	});	
-		
-	/*setInterval(function(), {
-		socket.emit('ping'){
-			io.on('pong')
-			{
-				
-			}
-		};
-	}, 15000);*/
-	
+	});
 });
 
 http.listen(3000, function(){

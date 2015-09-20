@@ -1,11 +1,7 @@
 var mysql = require('mysql');
 var io = require('socket.io');
-var connection = mysql.createConnection({
-	host	: 'localhost',
-	user	: 'root',
-	password: 'test1234',
-	database: 'vsklogin'
-});
+
+var connection = mysql.createConnection(require('./dbconnection.js'));
 
 //Muutetaan tietokannasta käyttäjän is_online arvo nollaksi. 0 = offline 1 = online
 exports.LogoutUser = function(username, callback){
