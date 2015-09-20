@@ -3,9 +3,9 @@ CREATE DATABASE vsklogin;
 USE vsklogin;
 
 CREATE TABLE login(
-id INT (6) auto_increment PRIMARY KEY NOT NULL,
-login VARCHAR(20),
-password VARCHAR(20)
+login VARCHAR(20) PRIMARY KEY NOT NULL,
+password VARCHAR(20),
+is_online TINYINT (1)
 );
 
 CREATE TABLE highscore(
@@ -19,3 +19,4 @@ id INT(6) PRIMARY KEY NOT NULL,
 login VARCHAR(20),
 message VARCHAR(160)
 );
+

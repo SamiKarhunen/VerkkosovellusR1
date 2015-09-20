@@ -12,22 +12,50 @@
 			<legend><strong>Login</strong></legend>
 			Username: <input type="text" name="username" id="username">
 			Password: <input type="text" name="password" id="password">
-			<button type='submit' onclick="Register()" value="Register">Register</button>
+			<button type='submit' onclick="Login()" id="loginButton" value="Login">Login</button>
+			<button type='submit' onclick="Register()" id="registerButton" value="Register">Register</button>
+			<button type='submit' onclick="Logout()" id="logoutButton" value="Logout">Logout</button>
 			<script type="text/javascript">
+			function Login(){
+				var username = $("#username").val();
+				var password = $("#password").val();
+				
+				//Lähetetään getillä kirjautuva username ja password
+				$.get("/login", {username: username, password: password}, function(res) {
+					alert(res);
+					//Loginin jälkeen emittaa eventin joka päivittää listaa
+					socket.emit('listUpdate');
+				});
+			}
+			
+			//Lähetetään getillä username
+			function Logout()
+			{
+				var username = $("#username").val();
+				console.log("going");
+				$.get("/logout", {username: username}, function(res){
+					alert(res);
+					//Emittaa eventin joka päivittää listaa
+					socket.emit('listUpdate');
+				});
+			}
+						
 			// Palauttaa username ja password id:llä merkittyjen kenttien arvot.
 			function Register() {
 				var username = $("#username").val();
 				var password = $("#password").val();
 				
-				//Salasana ja käyttäjätunnus lähtee GET-requestilla
 				$.get("/register", {username: username, password: password}, function(res) {
 					alert(res);
 				});
-			};
+			}
 			</script>
 		</fieldset>
 	</div>
-	<div id="chat" class="content">
+        <div id="gameboard_div">
+
+        </div>
+<div id="chat" class="content">
 		<script src = "/socket.io/socket.io.js"></script>
 		<script>
 			var socket = io();
@@ -43,20 +71,31 @@
 			Type your message: <input type="text" name="message input" id="message input" size="30" maxlength="120"> 
 		</fieldset>
 	</div>
-        <div id="gameboard_div" class="content">
-
-        </div>
-        <div id="online_users" class="floatright">
-        	<fieldset id="scoreplayers"><legend><strong>Online Users</strong></legend></fieldset>
-        </div>
-        <div id="high_score" class="floatright">
-        	<fieldset id="scoreplayers"><legend><strong>High Score</strong></legend></fieldset>
-        </div>
-
-
-		
-
+    <div id="online_users" class="floatright">
+       	<fieldset id="scoreplayers"><legend><strong>Online Users</strong></legend>
+			<ul id = "onlineNames"></ul>
+			<script>
+				//Listener userUpdate tapahtumalle joka tyhjentää #onlinenamesin
+				//ja siirtää sitten käyttäjälistan. En saanut vielä näkymään oikeana listana.
+				socket.on('userUpdate', function(data){
+					$("#onlineNames").empty();
+					$("#onlineNames").append($('<li>').text(data));
+				});
+			</script>	
+		</fieldset>
+    </div>
+	<div id="high_score" class="floatright">
+        <fieldset id="scoreplayers"><legend><strong>High Score</strong></legend></fieldset>
+    </div>
     </body>
 		<script src="https://code.jquery.com/jquery-2.1.4.js"></script>
         <script src="game.js"></script>
 </html>
+
+
+
+
+
+
+
+

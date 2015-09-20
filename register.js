@@ -14,8 +14,9 @@ exports.RegisterPlayer = function(username, password, callback) {
 			callback(err);
 			return;
 		} else {
-			connection.query('insert into login(login, password) values("'+ username + '","'+ password + '");', function(err){
+			connection.query('insert into login(login, password, is_online) values("'+ username + '","'+ password + '", 0);', function(err){
 				callback(err);
+				console.log(username + " registered.");
 			});
 		};
 	});
