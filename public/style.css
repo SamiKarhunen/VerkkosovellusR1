@@ -5,8 +5,8 @@ table, td, tr {
 }
 
 td {
-	width: 19px;
-	height: 19px;
+	width: 15px;
+	height: 15px;
 }
 
 td:hover {
@@ -26,8 +26,8 @@ fieldset {
 
 
 fieldset#chat {
-	height: 800px;
+	height: 600px;
 }
 
 fieldset#scoreplayers {
-	height: 400px;
+	height: 300px;
