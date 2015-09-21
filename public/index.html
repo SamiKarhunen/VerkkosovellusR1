@@ -13,12 +13,19 @@
     <div id="login">
                 <fieldset>
                         <legend><strong>Login</strong></legend>
-                        Username: <input type="text" name="username" id="username">
-                        Password: <input type="text" name="password" id="password">
+						
+						<p id="usernametext" style="display:inline">Username: </p>
+						<input type="text" name="username" id="username">
+						<p id='a_username' style="display:inline"></p>
+						
+						<p id="passwordtext" style="display:inline">Password: </p>
+						<input type="text" name="password" id="password">
+						
                         <button type='submit' onclick="Login()" id="loginButton" value="Login">Login</button>
                         <button type='submit' onclick="Register()" id="registerButton" value="Register">Register</button>
                         <button type='submit' onclick="Logout()" id="logoutButton" value="Logout">Logout</button>
                         <script type="text/javascript">
+						
                         function Login(){
                                 var username = $("#username").val();
                                 var password = $("#password").val();
@@ -26,8 +33,20 @@
                                 //Lähetetään getillä kirjautuva username ja password
                                 $.get("/login", {username: username, password: password}, function(res) {
                                         alert(res);
-                                        //Loginin jälkeen emittaa eventin joka päivittää listaa
-                                        socket.emit('listUpdate');
+										
+										//Jos response on tämä vv niin piilotetaan mm. input-kentät ja login & register napit.
+										if(res = "Login successful!")
+										{
+											$('#a_username').append(username); //Lisätään p-tagiin käyttäjätunnus jolla ollaan kirjauduttu.
+											$("#username").hide();
+											$("#loginButton").hide();
+											$("#registerButton").hide();
+											$("#password").hide();
+											$("#passwordtext").hide();
+											
+											//Loginin jälkeen emittaa eventin joka päivittää listaa.
+											socket.emit('listUpdate');
+										}
                                 });
                         }
                        
@@ -38,11 +57,20 @@
                                 console.log("going");
                                 $.get("/logout", {username: username}, function(res){
                                         alert(res);
+										
+										//Logoutin jälkeen näytetään aikaisemmin piilotetut kentät/napit.
+										$('#a_username').empty();
+										$("#username").show();
+										$("#loginButton").show();
+										$("#registerButton").show();
+										$("#password").show();
+										$("#passwordtext").show();
+										
                                         //Emittaa eventin joka päivittää listaa
                                         socket.emit('listUpdate');
                                 });
                         }
-                                               
+               
                         // Palauttaa username ja password id:llä merkittyjen kenttien arvot.
                         function Register() {
                                 var username = $("#username").val();
@@ -52,6 +80,12 @@
                                         alert(res);
                                 });
                         }
+						
+						function scoreReturn(score)
+						{
+							var username = $("#username").val();
+							socket.emit('scoreSave', username, score);
+						}
                         </script>
                 </fieldset>
         </div>
@@ -99,7 +133,27 @@
                 </fieldset>
     </div>
         <div id="high_score" class="floatright">
-        <fieldset id="scoreplayers"><legend><strong>High Score</strong></legend></fieldset>
+        <fieldset id="scoreplayers"><legend><strong>High Score</strong></legend>
+			<ol id="highscorelist"></ol>
+			<script>
+				socket.on('scoreUpdate', function(data){
+					$("#highscorelist").empty();
+					var x;
+					if(data.length > 10)
+					{
+						x = 10;
+					}
+					else
+					{
+						x=data.length;
+					}
+					for(i=0;i<x;i++)
+					{
+						$("#highscorelist").append($('<li>').text(data[i]));
+					}
+				});
+			</script>
+		</fieldset>
     </div>
  
                

@@ -47,7 +47,7 @@ app.get('/logout', function(req,res){
 		}
 		else
 		{
-			res.send("Logged out");
+			res.send("Logged out.");
 		};
 	});
 });
@@ -64,6 +64,7 @@ io.on('connection', function(socket){
 
 //Lista onlinekäyttäjistä
 var userlist = [];
+var scorelist = [];
 
 io.on('connection', function(socket){
 	socket.on('listUpdate', function(){
@@ -78,6 +79,17 @@ io.on('connection', function(socket){
 			//eventistä userUpdate jonka parametrinä on lista onlinekäyttäjistä.
 			console.log("Online users: " + userlist);
 			io.sockets.emit('userUpdate', userlist);
+		});
+	});
+	socket.on('scoreSave', function(user, score){
+		connection.query('insert into highscore (login, score) values ("' + user + '", ' + score + ');');
+		connection.query('select score from highscore order by score desc;', function (err,rows,fields){
+			scorelist = [];
+			for (var i in rows)
+			{
+				scorelist.push(rows[i].score);
+			}
+			io.sockets.emit('scoreUpdate', scorelist);
 		});
 	});
 });

@@ -9,14 +9,7 @@ is_online TINYINT (1)
 );
 
 CREATE TABLE highscore(
-id INT(6) PRIMARY KEY NOT NULL,
+id INT(6) PRIMARY KEY auto_increment NOT NULL,
 login VARCHAR(20),
 score INT(20)
 );
-
-CREATE TABLE chat(
-id INT(6) PRIMARY KEY NOT NULL,
-login VARCHAR(20),
-message VARCHAR(160)
-);
-

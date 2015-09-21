@@ -235,4 +235,5 @@ function gameOverScreen(){
 
 		}
 	}
+	scoreReturn(score);
 }
