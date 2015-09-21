@@ -1,106 +1,111 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-	<meta charset="UTF-8">
-	<title>Worm game</title>
-	<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
-	<link rel="stylesheet" href="style.css">
+        <meta charset="UTF-8">
+        <title>Worm game</title>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+                <script src="https://cdn.socket.io/socket.io-1.2.0.js"></script>
+                <script src="http://code.jquery.com/jquery-1.11.1.js"></script>
+        <link rel="stylesheet" href="style.css">
 </head>
  <body onload="startGame()">
+               
     <div id="login">
-		<fieldset>
-			<legend><strong>Login</strong></legend>
-			Username: <input type="text" name="username" id="username">
-			Password: <input type="text" name="password" id="password">
-			<button type='submit' onclick="Login()" id="loginButton" value="Login">Login</button>
-			<button type='submit' onclick="Register()" id="registerButton" value="Register">Register</button>
-			<button type='submit' onclick="Logout()" id="logoutButton" value="Logout">Logout</button>
-			<script type="text/javascript">
-			function Login(){
-				var username = $("#username").val();
-				var password = $("#password").val();
-				
-				//Lähetetään getillä kirjautuva username ja password
-				$.get("/login", {username: username, password: password}, function(res) {
-					alert(res);
-					//Loginin jälkeen emittaa eventin joka päivittää listaa
-					socket.emit('listUpdate');
-				});
-			}
-			
-			//Lähetetään getillä username
-			function Logout()
-			{
-				var username = $("#username").val();
-				console.log("going");
-				$.get("/logout", {username: username}, function(res){
-					alert(res);
-					//Emittaa eventin joka päivittää listaa
-					socket.emit('listUpdate');
-				});
-			}
-						
-			// Palauttaa username ja password id:llä merkittyjen kenttien arvot.
-			function Register() {
-				var username = $("#username").val();
-				var password = $("#password").val();
-				
-				$.get("/register", {username: username, password: password}, function(res) {
-					alert(res);
-				});
-			}
-			</script>
-		</fieldset>
-	</div>
-        
+                <fieldset>
+                        <legend><strong>Login</strong></legend>
+                        Username: <input type="text" name="username" id="username">
+                        Password: <input type="text" name="password" id="password">
+                        <button type='submit' onclick="Login()" id="loginButton" value="Login">Login</button>
+                        <button type='submit' onclick="Register()" id="registerButton" value="Register">Register</button>
+                        <button type='submit' onclick="Logout()" id="logoutButton" value="Logout">Logout</button>
+                        <script type="text/javascript">
+                        function Login(){
+                                var username = $("#username").val();
+                                var password = $("#password").val();
+                               
+                                //Lähetetään getillä kirjautuva username ja password
+                                $.get("/login", {username: username, password: password}, function(res) {
+                                        alert(res);
+                                        //Loginin jälkeen emittaa eventin joka päivittää listaa
+                                        socket.emit('listUpdate');
+                                });
+                        }
+                       
+                        //Lähetetään getillä username
+                        function Logout()
+                        {
+                                var username = $("#username").val();
+                                console.log("going");
+                                $.get("/logout", {username: username}, function(res){
+                                        alert(res);
+                                        //Emittaa eventin joka päivittää listaa
+                                        socket.emit('listUpdate');
+                                });
+                        }
+                                               
+                        // Palauttaa username ja password id:llä merkittyjen kenttien arvot.
+                        function Register() {
+                                var username = $("#username").val();
+                                var password = $("#password").val();
+                               
+                                $.get("/register", {username: username, password: password}, function(res) {
+                                        alert(res);
+                                });
+                        }
+                        </script>
+                </fieldset>
+        </div>
+       
 <div id="chat" class="content">
-		<script src = "/socket.io/socket.io.js"></script>
-		<script>
-			var socket = io();
-			
-			//vastataan palvelimen antamaan infoon
-			socket.on('info', function(data){
-				console.log(data);
-				socket.emit('message', {socket: 'connection established'});
-				socket.emit('listUpdate');
-				});
-		</script>
-		<fieldset id="chat">
-			<legend><strong>Chat</strong></legend>
-			Type your message: <input type="text" name="message input" id="message input" size="30" maxlength="120"> 
-		</fieldset>
-	</div>
-	<div id="gameboard_div" class="content">
-
+               
+                <fieldset id="chat">
+                    <legend><strong>Chat</strong></legend>
+                                       
+                                        <form action="">
+      <input id="m" autocomplete="off" /><button>Send</button>
+    </form>
+     <ul id="messages"></ul>
+ 
+    <script>
+      var socket = io();
+      $('form').submit(function(){
+        socket.emit('chat message', $('#m').val());
+        $('#m').val('');
+        return false;
+      });
+      socket.on('chat message', function(msg){
+        $('#messages').append($('<li>').text(msg));
+      });
+    </script>
+                </fieldset>
+        </div>
+        <div id="gameboard_div" class="content">
+ 
         </div>
     <div id="online_users" class="floatright">
-       	<fieldset id="scoreplayers"><legend><strong>Online Users</strong></legend>
-			<ul id = "onlineNames"></ul>
-			<script>
-				//Listener userUpdate tapahtumalle joka tyhjentää #onlinenamesin
-				//ja siirtää sitten käyttäjälistan.
-				socket.on('userUpdate', function(data){
-					$("#onlineNames").empty();
-					for(i=0;i<data.length;i++)
-					{
-						$("#onlineNames").append($('<li>').text(data[i]));
-					}
-				});
-			</script>	
-		</fieldset>
+        <fieldset id="scoreplayers"><legend><strong>Online Users</strong></legend>
+                        <ul id = "onlineNames"></ul>
+                        <script>
+                                //Listener userUpdate tapahtumalle joka tyhjentää #onlinenamesin
+                                //ja siirtää sitten käyttäjälistan.
+                                socket.on('userUpdate', function(data){
+                                        $("#onlineNames").empty();
+                                        for(i=0;i<data.length;i++)
+                                        {
+                                                $("#onlineNames").append($('<li>').text(data[i]));
+                                        }
+                                });
+                        </script>      
+                </fieldset>
     </div>
-	<div id="high_score" class="floatright">
+        <div id="high_score" class="floatright">
         <fieldset id="scoreplayers"><legend><strong>High Score</strong></legend></fieldset>
     </div>
+ 
+               
     </body>
-		<script src="https://code.jquery.com/jquery-2.1.4.js"></script>
-        <script src="game.js"></script>
+                <script src="/socket.io/socket.io.js"></script>
+                <script> var socket = io();</script>
+                                <script src="game.js"></script>
+ 
 </html>
-
-
-
-
-
-
-
-

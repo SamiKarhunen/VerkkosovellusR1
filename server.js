@@ -10,6 +10,7 @@ var register = require('./functions/register.js');
 var login = require('./functions/login.js');
 var logout = require('./functions/logout.js');
 
+
 app.use(express.static('public'));
 
 app.get('/register', function(req, res) {
@@ -51,22 +52,20 @@ app.get('/logout', function(req,res){
 	});
 });
 
+app.get('/', function(req, res){
+  res.sendFile(__dirname/ + '/public/index.html');
+});
+
+io.on('connection', function(socket){
+  socket.on('chat message', function(msg){
+    io.emit('chat message', msg);
+  });
+});
+
 //Lista onlinekäyttäjistä
 var userlist = [];
 
 io.on('connection', function(socket){
-	console.log('Client connected');
-		
-	socket.on('disconnect', function(){
-		console.log('Client disconnected');
-	});
-
-	socket.emit('info', {info: 'you have connected to matopelipalvelin'});
-	
-	socket.on('message', function(data){
-		console.log(data);
-	});	
-	
 	socket.on('listUpdate', function(){
 		//Työnnetään userlistiin käyttäjät jotka ovat online/joiden is_online arvo on 1
 		connection.query("select login from login where is_online=1;", function(err,rows,fields){
@@ -82,6 +81,9 @@ io.on('connection', function(socket){
 		});
 	});
 });
+
+
+
 
 http.listen(3000, function(){
 	console.log("Listening on http://127.0.0.1:3000");
