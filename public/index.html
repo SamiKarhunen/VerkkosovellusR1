@@ -26,10 +26,15 @@
                         <button type='submit' onclick="Logout()" id="logoutButton" value="Logout">Logout</button>
                         <script type="text/javascript">
 						
+						var loggedin = false;
+						$('#logoutButton').hide();
+						
                         function Login(){
+								
+								
                                 var username = $("#username").val();
                                 var password = $("#password").val();
-                               
+								
                                 //Lähetetään getillä kirjautuva username ja password
                                 $.get("/login", {username: username, password: password}, function(res) {
                                         alert(res);
@@ -37,12 +42,14 @@
 										//Jos response on tämä vv niin piilotetaan mm. input-kentät ja login & register napit.
 										if(res = "Login successful!")
 										{
+											loggedin = true;
 											$('#a_username').append(username); //Lisätään p-tagiin käyttäjätunnus jolla ollaan kirjauduttu.
 											$("#username").hide();
 											$("#loginButton").hide();
 											$("#registerButton").hide();
 											$("#password").hide();
 											$("#passwordtext").hide();
+											$('#logoutButton').show();
 											
 											//Loginin jälkeen emittaa eventin joka päivittää listaa.
 											socket.emit('listUpdate');
@@ -58,6 +65,8 @@
                                 $.get("/logout", {username: username}, function(res){
                                         alert(res);
 										
+										loggedin = false;
+										
 										//Logoutin jälkeen näytetään aikaisemmin piilotetut kentät/napit.
 										$('#a_username').empty();
 										$("#username").show();
@@ -65,7 +74,8 @@
 										$("#registerButton").show();
 										$("#password").show();
 										$("#passwordtext").show();
-										
+										$('#logoutButton').hide();
+
                                         //Emittaa eventin joka päivittää listaa
                                         socket.emit('listUpdate');
                                 });
@@ -75,16 +85,19 @@
                         function Register() {
                                 var username = $("#username").val();
                                 var password = $("#password").val();
-                               
-                                $.get("/register", {username: username, password: password}, function(res) {
-                                        alert(res);
-                                });
+								
+								$.get("/register", {username: username, password: password}, function(res) {
+										alert(res);
+								});
                         }
 						
 						function scoreReturn(score)
 						{
-							var username = $("#username").val();
-							socket.emit('scoreSave', username, score);
+							if(loggedin)
+							{
+								var username = $("#username").val();
+								socket.emit('scoreSave', username, score);
+							}
 						}
                         </script>
                 </fieldset>
@@ -103,12 +116,12 @@
     <script>
       var socket = io();
       $('form').submit(function(){
-        socket.emit('chat message', $('#m').val());
+        socket.emit('chat message',$('#username').val(), $('#m').val());
         $('#m').val('');
         return false;
       });
-      socket.on('chat message', function(msg){
-        $('#messages').append($('<li>').text(msg));
+      socket.on('chat message', function(user,msg){
+        $('#messages').append($('<li>').text(user+": "+msg));
       });
     </script>
                 </fieldset>

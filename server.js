@@ -57,8 +57,8 @@ app.get('/', function(req, res){
 });
 
 io.on('connection', function(socket){
-  socket.on('chat message', function(msg){
-    io.emit('chat message', msg);
+  socket.on('chat message', function(user,msg){
+    io.emit('chat message',user, msg);
   });
 });
 
@@ -83,11 +83,12 @@ io.on('connection', function(socket){
 	});
 	socket.on('scoreSave', function(user, score){
 		connection.query('insert into highscore (login, score) values ("' + user + '", ' + score + ');');
-		connection.query('select score from highscore order by score desc;', function (err,rows,fields){
+		connection.query('select login, score from highscore order by score desc;', function (err,rows,fields){
 			scorelist = [];
+			
 			for (var i in rows)
 			{
-				scorelist.push(rows[i].score);
+				scorelist.push([rows[i].login, rows[i].score]);
 			}
 			io.sockets.emit('scoreUpdate', scorelist);
 		});
