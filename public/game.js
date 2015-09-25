@@ -90,6 +90,7 @@ function drawApple(){
 
 function initSnake(){
 	score = 0;
+	direction = 2;
 	for ( i = 0; i < START_LENGTH; i++){
 		var row = Math.floor((gameboardWidth/2)); //Asetetaan riviksi keskimmäinen rivi
 		var data = Math.floor((gameboardHeight/2) - i); //asetetaan dataksi keskimmäinen td - kierroksen numero
