@@ -1,7 +1,7 @@
 var express = require('express');
 var app = express();
 var http = require('http').Server(app);
-var io = require('socket.io')(http);
+var io = require('socket.io')('http://matopeli-karhussami.rhcloud.com:8000/');
 var mysql = require('mysql');
 
 var connection = mysql.createConnection(require('./functions/dbconnection.js'));
