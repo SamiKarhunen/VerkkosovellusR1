@@ -1,8 +1,6 @@
 var express = require('express');
 var app = express();
-var http = require('http').Server(app).listen(config.port, function(){
-	console.log('http app started')
-});
+var http = require('http').Server(app);
 var io = require('socket.io');
 var mysql = require('mysql');
 
