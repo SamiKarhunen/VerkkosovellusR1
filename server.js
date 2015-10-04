@@ -9,7 +9,8 @@ var connection = mysql.createConnection(require('./functions/dbconnection.js'));
 var register = require('./functions/register.js');
 var login = require('./functions/login.js');
 var logout = require('./functions/logout.js');
-
+var port = process.env.OPENSHIFT_NODEJS_PORT;
+var ip = process.env.OPENSHIFT_NODEJS_IP;
 
 app.use(express.static('public'));
 
@@ -98,7 +99,7 @@ io.on('connection', function(socket){
 
 
 
-http.listen(3000, function(){
-	console.log("Listening on http://127.0.0.1:3000");
+http.listen(port, function(){
+	console.log("Listening on " + ip);
 });
 
