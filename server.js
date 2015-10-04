@@ -1,6 +1,6 @@
 var express = require('express');
 var app = express();
-var http = require('http').Server(app);
+var http = require('http');
 var io = require('socket.io')('http://matopeli-karhussami.rhcloud.com:8000/');
 var mysql = require('mysql');
 
@@ -9,8 +9,8 @@ var connection = mysql.createConnection(require('./functions/dbconnection.js'));
 var register = require('./functions/register.js');
 var login = require('./functions/login.js');
 var logout = require('./functions/logout.js');
-var port = process.env.OPENSHIFT_NODEJS_PORT || 8080;
-var ip = process.env.OPENSHIFT_NODEJS_IP || '127.0.0.1';
+app.set('port', process.env.OPENSHIFT_NODEJS_PORT || process.env.PORT || 3002);
+app.set('ip', process.env.OPENSHIFT_NODEJS_IP || "127.0.0.1");
 
 app.use(express.static('public'));
 
@@ -99,7 +99,8 @@ io.on('connection', function(socket){
 
 
 
-http.listen(port, function(){
-	console.log("Listening on " + ip);
+http.createServer(app).listen(app.get('port') ,app.get('ip'), function () {
+    console.log("✔ Express server listening at %s:%d ", app.get('ip'),app.get('port'));
+    server();
 });
 
