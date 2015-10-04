@@ -97,9 +97,9 @@ io.on('connection', function(socket){
 });
 
 
-app.listen(ip);
 
-http.listen(port, function(){
+
+http.listen(port, ip, function(){
 	console.log("Listening on " + ip);
 });
 
