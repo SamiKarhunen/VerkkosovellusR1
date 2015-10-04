@@ -17,6 +17,10 @@
     "type": "git",
     "url": "git+https://github.com/SamiKarhunen/VerkkosovellusR1.git"
   },
+  "engines": {
+    "node": "^0.10.40",
+    "npm": "^1.4.28"
+  },
   "author": "",
   "license": "ISC",
   "bugs": {
@@ -24,3 +28,4 @@
   },
   "homepage": "https://github.com/SamiKarhunen/VerkkosovellusR1#readme"
 }
+
