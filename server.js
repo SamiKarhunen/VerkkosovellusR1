@@ -99,9 +99,7 @@ io.on('connection', function(socket){
 
 
 
-http.createServer(app).listen(app.get('port') ,app.get('ip'), function () {
-    console.log("✔ Express server listening at %s:%d ", app.get('ip'),app.get('port'));
-    server();
-});
+http.listen(port, function(){
+	console.log("Listening on " + ip);
 });
 
