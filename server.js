@@ -9,8 +9,8 @@ var connection = mysql.createConnection(require('./functions/dbconnection.js'));
 var register = require('./functions/register.js');
 var login = require('./functions/login.js');
 var logout = require('./functions/logout.js');
-var port = process.env.OPENSHIFT_NODEJS_PORT || process.env.PORT || 3002;
-var ip = process.env.OPENSHIFT_NODEJS_IP || "127.0.0.1";
+var port = process.env.OPENSHIFT_NODEJS_PORT || 8080;
+var ip = process.env.OPENSHIFT_NODEJS_IP || '127.0.0.1';
 
 app.use(express.static('public'));
 
