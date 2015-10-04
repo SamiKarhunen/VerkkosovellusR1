@@ -3,7 +3,7 @@ var app = express();
 var http = require('http').Server(app).listen(config.port, function(){
 	console.log('http app started')
 });
-var io = require('socket.io')('http://matopeli-karhussami.rhcloud.com:8000/');
+var io = require('socket.io');
 var mysql = require('mysql');
 
 var connection = mysql.createConnection(require('./functions/dbconnection.js'));
